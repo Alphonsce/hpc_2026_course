@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     double *x = (double *)malloc(N * sizeof(double));
     double *y = (double *)malloc(N * sizeof(double));
     
-    // Generate data with Gaussian noise using Box-Muller transform
+    // Generate data with Gaussian noise
     for (int i = 0; i < N; i++) {
         x[i] = (double)rand() / RAND_MAX;
         double u1 = (double)rand() / RAND_MAX;

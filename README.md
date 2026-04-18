@@ -14,7 +14,7 @@ All plots can be found in the [plots.ipynb](plots.ipynb) file.
 
 ### `BugReduction.c`
 
-Script for running is `scripts/bugs.sh`.
+Script for running is [scripts/bugs.sh](scripts/bugs.sh).
 
 **Bug:** `main` had `#pragma omp parallel shared(sum)` around only the call `dotprod(a, b, N)`. So, each thread had `dotprod` with its own stack frame, so the local `sum` in `dotprod` is effectively private per thread.
 
@@ -48,7 +48,7 @@ Script for running is `scripts/bugs.sh`.
 
 ### `Pi.c`
 
-Script for running is `scripts/pi.sh`.
+Script for running is [scripts/pi.sh](scripts/pi.sh).
 
 I parallelized sum computation in the for loop with `#pragma omp parallel for reduction(+ : sum)`. I added Open MP's internal execution time measurement, `omp_get_wtime`, to see time gains from increase in number of threads.
 
@@ -58,7 +58,7 @@ In the figure below, you can see the time elapsed to compute pi with different n
 
 ### `Car.cpp`
 
-Script for running is `scripts/car.sh`.
+Script for running is [scripts/car.sh](scripts/car.sh).
 
 I parallelized the image shift operation in Car.cpp by adding #pragma omp parallel for to the loop over image rows (i).
 For each animation step, each thread processes different rows independently: it shifts columns to the right (A[i][j] -> A[i][j+1]) using an auxiliary array with one extra column (M+1), and wraps the last column into the first position. Since threads work on separate row ranges, there are no write conflicts.
@@ -75,7 +75,7 @@ In the archive provided there were no `Axisb.c` and `LeastSquares.c` implementat
 
 ### `Axisb.c`
 
-Script for running is `scripts/Axisb.sh`.
+Script for running is [scripts/Axisb.sh](scripts/Axisb.sh).
 
 The Jacobi method is an iterative algorithm used to solve a system of linear equations $Ax = b$. It works by continuously refining an initial guess for the solution $x$. In each iteration, the new value for a specific variable $x_i$ is calculated using the other variables $x_j$ from the *previous* iteration:
 
@@ -95,7 +95,7 @@ On the figure below, you can see the time elapsed to compute the Jacobi method w
 
 ### `LeastSquares.c`
 
-Script for running is `scripts/LeastSquares.sh`.
+Script for running is [scripts/LeastSquares.sh](scripts/LeastSquares.sh).
 
 This program solves the Linear Regression problem using Gradient Descent. Given a set of $N$ points $(x_i, y_i)$ generated with the model $y = ax + b + \epsilon$ (where $\epsilon$ is random noise), the goal is to find the parameters $a$ and $b$ that minimize the Mean Squared Error (MSE):
 

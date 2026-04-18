@@ -58,3 +58,5 @@ dkms.conf
 
 frames
 frames_png
+
+.DS_Store
