@@ -1,6 +1,6 @@
 mkdir -p results
 
-cd hw1 || exit 1
+cd hw1
 gcc-15 Pi.c -o pi -fopenmp
 
 echo "threads,time_seconds,pi_output" >> ../results/pi.txt

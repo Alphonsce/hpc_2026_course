@@ -1,6 +1,6 @@
 mkdir -p results
 
-cd hw1 || exit 1
+cd hw1
 gcc-15 Axisb.c -o axisb -fopenmp -lm
 
 echo "threads,time_seconds" > ../results/axisb.txt
