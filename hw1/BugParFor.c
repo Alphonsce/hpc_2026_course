@@ -2,32 +2,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     const size_t N = 100;
     const size_t chunk = 3;
 
-    int i, tid;
+    int i;
     float a[N], b[N], c[N];
 
-    for (i = 0; i < N; ++i)
+    for (i = 0; i < (int)N; ++i)
     {
         a[i] = b[i] = (float)i;
     }
 
-    #pragma omp parallel \
-    shared(a,b,c,chunk) \
-    private(i,tid) \
-    schedule(static,chunk)
+#pragma omp parallel for schedule(static, chunk) shared(a, b, c)
+    for (i = 0; i < (int)N; ++i)
     {
-        tid = omp_get_thread_num();
-
-        for (i = 0; i < N; ++i)
-        {
-            c[i] = a[i] + b[i];
-            printf("tid = %d, c[%d] = %f\n", tid, i, c[i]);
-        }
-    } 
+        c[i] = a[i] + b[i];
+        printf("tid = %d, c[%d] = %f\n", omp_get_thread_num(), i, c[i]);
+    }
 
     return 0;
 }

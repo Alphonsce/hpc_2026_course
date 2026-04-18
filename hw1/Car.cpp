@@ -1,5 +1,7 @@
 #include <fstream>
 #include <iostream>
+#include <omp.h>
+#include <sys/stat.h>
 #include <stdlib.h>
 #include <string>
 #include <thread>
@@ -45,7 +47,7 @@ void readPPM(const char *filename, PPMImage &img){
     file.close();
 }
 
-void writePPM(const char *filename, PPMImage &img) {
+void writePPM(const std::string &filename, const PPMImage &img) {
     std::ofstream file(filename, std::ofstream::out);
     file << "P3" << std::endl;
     file << img.x << " " << img.y << " " << std::endl;
@@ -59,9 +61,52 @@ void writePPM(const char *filename, PPMImage &img) {
 }
 
 int main(int argc, char *argv[]) {
+    int save_every = 20;
+    if (argc > 1) {
+        save_every = std::atoi(argv[1]);
+        if (save_every <= 0) {
+            save_every = 20;
+        }
+    }
+
     PPMImage image;
     readPPM("car.ppm", image);
+
+    const int width = image.x;
+    const int height = image.y;
+    const int steps = width;
+    PPMPixel *with_extra_col = new PPMPixel[height * (width + 1)];
+    mkdir("frames", 0777);
+
+    double t1 = omp_get_wtime();
+    for (int step = 0; step < steps; ++step) {
+        #pragma omp parallel for
+        for (int i = 0; i < height; ++i) {
+            const int row_src = i * width;
+            const int row_dst = i * (width + 1);
+
+            for (int j = 0; j < width; ++j) {
+                with_extra_col[row_dst + (j + 1)] = image.data[row_src + j];
+            }
+            with_extra_col[row_dst] = image.data[row_src + (width - 1)];
+
+            for (int j = 0; j < width; ++j) {
+                image.data[row_src + j] = with_extra_col[row_dst + j];
+            }
+        }
+
+        if (step % save_every == 0) {
+            writePPM("frames/frame_" + std::to_string(step) + ".ppm", image);
+        }
+    }
+
+    double t2 = omp_get_wtime();
     writePPM("new_car.ppm", image);
+    std::cout << "threads = " << THREADS << std::endl;
+    std::cout << "time = " << (t2 - t1) << " sec" << std::endl;
+
+    delete[] with_extra_col;
+    delete[] image.data;
     return 0;
 }
 
