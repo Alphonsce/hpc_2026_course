@@ -1,10 +1,12 @@
 # HPC Course 2026, Homework 1.
 
-Report can be found in the [HPC_2026_1_Report.pdf](HPC_2026_1_Report.pdf) file.
+Report on the work done is this README.
 
-All compilations and executions can be done via the scripts in the `scripts` directory.
+All compilations and executions can be done via the scripts in the [scripts](scripts) directory.
 
 I did this task on MacBook Pro with chip M4 Pro with ~12 parallel threads possible.
+
+All plots can be found in the [plots.ipynb](plots.ipynb) file.
 
 ---
 
@@ -112,7 +114,7 @@ The resulting fit is shown in the figure below.
 ![Linear Regression Fit](results/ls_fit.png)
 
 **Effectiveness of OpenMP for different N:**
-The performance of OpenMP heavily depends on the workload size ($N$). Based on our benchmarks:
+The performance of OpenMP heavily depends on the workload size ($N$). Based on the experiments:
 - **Small $N$ (100 - 10,000):** Using multiple threads is actually *slower* than a single thread. The overhead of spawning threads, distributing work, and synchronizing the `reduction` 1000 times (for each epoch) far outweighs the tiny amount of math each thread performs.
 - **Medium $N$ (100,000):** We start to see a minor speedup up to 4 threads, but adding more threads degrades performance again due to overhead.
 - **Large $N$ (1,000,000 to 10,000,000+):** We see excellent scaling. For $N=10,000,000$, the time drops from ~9.09s (1 thread) to ~1.14s (8 threads). The workload is large enough that the computation time dominates the OpenMP synchronization overhead.
