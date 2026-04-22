@@ -32,7 +32,7 @@ Script for running is [scripts/bugs.sh](scripts/bugs.sh).
 
 Script for running is `scripts/bugs.sh`.
 
-**Bug:** `schedule(static, chunk)` was placed on `#pragma omp parallel` only. Putting it on `omp parallel` is invalid: the parallel region only forks threads; it does not distribute loop iterations.
+**Bug:** `schedule(static, chunk)` was placed on `#pragma omp parallel` only. Putting it on `omp parallel` is invalid: the parallel region only forks threads, it does not distribute loop iterations.
 
 **Fix:** Use `#pragma omp parallel for schedule(static, chunk)` so scheduling applies to the loop.
 
@@ -40,9 +40,9 @@ Script for running is `scripts/bugs.sh`.
 
 **Fix:** Make it a single `parallel for` so iterations are split across threads.
 
-**Bug:** `private(i, tid)` and `tid` set before the loop. `tid` was set once per thread before the loop; with a correct parallel loop, `omp_get_thread_num()` should be used where we report work, so each printed line matches the thread that actually ran that iteration.
+**Bug:** `private(i, tid)` and `tid` set before the loop. `tid` was set once per thread before the loop, with a correct parallel loop, `omp_get_thread_num()` should be used where we report work, so each printed line matches the thread that actually ran that iteration.
 
-**Fix:** Drop the extra `private/shared`: the loop variable is handled correctly by `parallel for`; use `omp_get_thread_num()` in the `printf` for the real thread id per iteration.
+**Fix:** Drop the extra `private/shared`: the loop variable is handled correctly by `parallel for`, use `omp_get_thread_num()` in the `printf` for the real thread id per iteration.
 
 ## Sequential programs to parallelize
 
